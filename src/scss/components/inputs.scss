@@ -1,0 +1,38 @@
+@import '../vars.scss';
+
+input{}
+
+.inputcopy {
+    position: relative;
+    :hover{
+        cursor: pointer;
+        .copy{
+            background-color: $bootstrap-primary-hover;
+        }
+    }
+    .copy{
+        font-family: "Font Awesome 6 Free";
+        content: "\f0c5";
+        color: white;
+        font-size: 21px;
+        padding-left: 8px;
+        padding-top: 3px;
+        position: absolute;
+        height: 100%;
+        width: 40px;
+        background-color: $bootstrap-primary;
+        right: 0;
+        border-radius: 4px;
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+        // &::before{
+        //     // content: '';
+        //     position: absolute;
+        //     top: 0;
+        //     right: 0;
+        //     width: 30px;
+        //     height: 100%;
+        //     background-color: black;
+        // }
+    }
+}

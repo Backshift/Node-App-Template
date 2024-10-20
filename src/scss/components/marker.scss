@@ -1,0 +1,18 @@
+.marker{
+    // font-family: "Font Awesome 5 Free";
+    // content: "\f3c5";
+    $size: 25px;
+    width: $size;
+    height: $size;
+    font-size: $size;
+    &-online{
+        // color: blue;
+        color: $online_devices;
+        opacity: 0.5;
+        z-index: 1;
+    }
+    &-offline{
+        opacity: 0.5;
+        color: $offline_devices;
+    }
+}

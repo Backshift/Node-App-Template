@@ -1,0 +1,284 @@
+extends ../../layout/layout
+
+//- block outercontent
+block outercontent
+
+block content
+
+    style.
+        .droppable {
+        background: #08c;
+        color: #fff;
+        padding: 20px 0;
+        text-align: center;
+        width: 100%;
+        }
+        .droppable.dragover {
+        background: #00CC71;
+        }
+        .droppable_files {
+        display: table;
+        }
+        .droppable_files_cell {
+        display: table-cell;
+        text-align: center;
+        }
+        .errors{
+        }
+        .alert.alert-danger {
+        color: #721c24;
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        }
+        .alert{
+        margin-top: 1rem;
+        position: relative;
+        padding: .75rem 1.25rem;
+        margin-bottom: 1rem;
+        border: 1px solid transparent;
+        border-radius: .25rem;
+        }
+    script(src='https://code.jquery.com/jquery-3.7.1.min.js', integrity='sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=', crossorigin='anonymous')
+    script.
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for(var i=0;i < ca.length;i++) {
+                var c = ca[i];
+                while (c.charAt(0)==' ') {
+                    c = c.substring(1,c.length);
+                }
+                if (c.indexOf(nameEQ) == 0) {
+                    return c.substring(nameEQ.length,c.length);
+                }
+            }
+            return null;
+        }
+        function createFormData (filesArr) {
+        let formData = new FormData();
+        for (let i = 0; i < filesArr.length; i++){
+        let fileList = filesArr[i];
+        for (let z =0; z < filesArr[i].length; z++){
+        let file = filesArr[i][z];
+        formData.append("files[]", file, file.name);
+        }
+        }
+        // for(var key of formData.entries()){console.log(key[0] + ', ' + key[1]);}
+        return formData;
+        }
+        // https://wordpress.stackexchange.com/questions/273868/form-data-is-empty-while-posting-form-through-ajax-using-jquery-in-wordpress
+        // http://youmightnotneedjquery.com/
+        Element.prototype.parent = function(){
+        return this.parentNode;
+        };
+        Element.prototype.find = function (el) {
+        return this.querySelector(el);
+        };
+        Element.prototype.findAll = function (el) {
+        return this.querySelectorAll(el);
+        };
+        function round(value, precision) {
+        var multiplier = Math.pow(10, precision || 0);
+        return Math.round(value * multiplier) / multiplier;
+        }
+    // <script type="text/javascript" src="<?php echo $this->pluginDir ?>/js/droppable.js"></script>
+    script.
+        function makeDroppable(callback) {
+        var element = document.querySelector('.droppable');
+        let fileCount = 0;
+        let fileList = [];
+        let input = document.createElement('input');
+        console.log(element.parent());
+        let dropform = element.parent().find('.dropform'); // Where we need to append the input for submission
+        let inputName = 'files[]';
+        input.setAttribute('type', 'file');
+        input.setAttribute('multiple', true);
+        input.setAttribute('name', inputName);
+        input.style.display = 'none';
+        input.addEventListener('change', triggerCallback);
+        dropform.appendChild(input);
+        element.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        element.classList.add('dragover');
+        });
+        element.addEventListener('dragleave', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        element.classList.remove('dragover');
+        });
+        element.addEventListener('drop', function (e) {
+        // console.log('Dropped item');
+        e.preventDefault();
+        e.stopPropagation();
+        element.classList.remove('dragover');
+        triggerCallback(e);
+        });
+        document.querySelector('.clear-files').addEventListener('click', function (e) {
+        console.log('Clicked me', fileList);
+        fileCount = 0;
+        fileList = [];
+        // HERE
+        element.parent().find('.droppable_files').innerHTML = '';
+        updateNumberText(fileCount);
+        console.log('Clicked me', fileList);
+        });
+        document.querySelector('.ajax-upload').addEventListener('click', function(e){
+        element.parent().find('.droppable_files').innerHTML = '';
+        updateNumberText(0);
+        });
+        element.addEventListener('click', function () {
+        input.value = null;
+        input.click();
+        });
+        function triggerCallback(e) {
+        var files;
+        if (e.dataTransfer) {
+        files = e.dataTransfer.files;
+        } else if (e.target) {
+        files = e.target.files;
+        }
+        fileList.push(files);
+        console.log(fileList);
+        element.parent().find('.droppable_files').innerHTML = '';
+        fileCount += files.length;
+        // --- Loop each of the uploaded images
+        for (let i = 0; i < fileList.length; i++) {
+        const files = fileList[i];
+        for (let j = 0; j < files.length; j++) {
+        createNewCell(files[j]);
+        }
+        }
+        updateNumberText(fileCount);
+        callback.call(null, createFormData(fileList));
+        }
+        function updateNumberText(count) {
+        let input_count = element.find('.droppable_count');
+        input_count.innerHTML = count;
+        }
+        function createNewCell(file) {
+        let cellContainer = element.parent().find('.droppable_files');
+        let wrapper = document.createElement('div');
+        let fileIcon = document.createElement('div');
+        let fileName = document.createElement('fileName');
+        let fileSize = document.createElement('fileSize');
+        let fileSizeInMB = round(file.size / 1000000, 2);
+        fileSize.setAttribute('class', 'fileSize');
+        fileName.setAttribute('class', 'fileName');
+        fileIcon.setAttribute('class', 'fa fa-upload');
+        wrapper.setAttribute('class', 'droppable_files_cell');
+        fileName.innerHTML = file.name;
+        fileSize.innerHTML = fileSizeInMB;
+        wrapper.appendChild(fileIcon);
+        wrapper.appendChild(fileName);
+        wrapper.appendChild(fileSize);
+        cellContainer.appendChild(wrapper);
+        }
+        return { files: createFormData(fileList) }
+        }
+    script(type='text/javascript').
+        document.addEventListener('DOMContentLoaded', function(){
+        var frmData = null;
+        var APP_URL = 'https://<file_upload_url>/api/file_upload/'
+        
+        // $('.ajax-upload').on("click", function(event){
+        //   event.preventDefault();
+        //   console.log("click");
+        // })
+        $(document).on('click', '.ajax-upload', function (event) {
+        frmData.append('jwt_auth', readCookie("jwt_auth"))
+        event.preventDefault();
+        console.log("submit", frmData);
+        $.ajax({
+        url: APP_URL,
+        // dataType: "json",
+        data: frmData,
+        processData: false,  // tell jQuery not to process the data
+        // contentType: 'multipart/form-data; boundary=AaB03x;', // tell jQuery not to set contentType
+        contentType: false,
+        type: 'POST',
+        success: function (data) {
+        var errDiv = $('.errors');
+        errDiv.html('');
+        console.log("success");
+        console.log(data);
+        if(data.errors.length > 0){
+        console.log('have errors');
+        for(var i = 0; i < data.errors.length; i++){
+        errDiv.append('<div class="alert alert-danger">' + data.errors[i]['filename'] + ': ' + data.errors[i]['error_msg'] + '</div>');
+        }
+        }
+        },
+        error: function (data) {
+        // var errDiv = $('.errors');
+        // errDiv.html('');
+        // console.log(errDiv);
+        // for (var item in data.responseJSON) {
+        //     for (var i = 0; i < data.responseJSON[item].length; i++) {
+        //         errDiv.append('<div class="alert alert-danger">' + data.responseJSON[item] + '</div>');
+        //     }
+        // }
+        }
+        });
+        21
+        });
+        $(document).on('click', '.clear-files', function (event) {
+        event.preventDefault();
+        frmData = null;
+        });
+        makeDroppable(function(data){
+        frmData = data;
+        });
+        });
+    h1.test.mt-3 KML File Upload
+    // Dropable field
+    .droppable
+        div
+        // <span class="fa fa-upload" style="font-size: 8em;"></span>
+        span.dashicons.dashicons-paperclip
+                Please drag or click to upload your files here...
+        .droppable_count &nbsp;
+    .droppable_files
+    form.dropform(action='', method='POST', enctype='multipart/form-data')
+        // <input type="text" value="something" name="sm"/>
+        .form-group.py-2(style='margin-top: 20px;')
+        input.button.button-secondary.clear-files.btn.btn-primary.mr-2(type='button', value='Clear Files')
+        //
+        <div class="form-group" style="display: inline-block;">
+        <input type="submit" class="btn btn-secondary ajax-upload" />
+        </div>
+        // <input type="text" name="test" value="test"/>
+        .form-group.py-2(style='margin-top: 20px;')
+        // 
+        .errors
+
+block scripts
+  script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous")
+  script(src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous")
+  script(src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous")
+  script(
+  src="https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.js"
+  )
+  link(
+  rel="stylesheet"
+  href="https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.css"
+  )
+  style(type="text/css").
+    textarea {
+      resize: none;
+      width: 100%; 
+      height: 100px;
+    }
+
+
+block body_scripts
+  script(
+  src=`${base_url}/js/sweetalert.js`
+  )
+  script(
+  src=`${base_url}/js/moment.js`
+  )
+  script(
+  src=`${base_url}/js/moment_timezone.js`
+  )
+  script(src=`${base_url}/js/vendor/bundle.js`) 

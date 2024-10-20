@@ -1,0 +1,68 @@
+//- extends index
+include ../components/mixins
+
+
+block variables
+doctype html
+html.h-100(lang="en")
+  head
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width,initial-scale=1.0")
+    //- link(
+    //-   rel="shortcut icon",
+    //-   href=""
+    //-   )
+    meta(name="theme-color", content="#000000")
+    meta(
+      name="description",
+      content="Search engine"
+      )
+
+    //- Date Picker
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css")
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js")
+    //- Date Picker
+
+    link(
+      rel="stylesheet",
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css",
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T",
+      crossorigin="anonymous"
+    )
+    link(
+      rel="stylesheet",
+      href=`${base_url}/css/basic.css?v=${asset_version_no}`
+    )
+    link(
+      rel="stylesheet",
+      href=`${base_url}/css/compiled.css?v=${asset_version_no}`
+    )
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css")
+    link(rel="stylesheet", href=`${base_url}/css/style.css?v=${asset_version_no}`)
+    block scripts
+    link(rel="stylesheet" href="/index.css")
+    script(src="https://kit.fontawesome.com/3116610f1c.js", crossorigin="anonymous")
+    script(src="https://kit.fontawesome.com/f93645b27f.js" crossorigin="anonymous") 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@forevolve/bootstrap-dark@1.0.0/dist/css/toggle-bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@forevolve/bootstrap-dark@1.0.0/dist/css/toggle-bootstrap-dark.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@forevolve/bootstrap-dark@1.0.0/dist/css/toggle-bootstrap-print.min.css" />
+
+    title Search Engine
+  body.h-100
+    //- - var height_100 = 'h-100';
+    if page100 == false
+      div(id="app" class="d-flex flex-column" style="min-height: 100%;")
+        block outercontent
+        //- container -> did have container class now removed
+        div(class="flex-grow-1")
+          block content
+        +footer
+    else 
+      div(id="app" class="d-flex flex-column h-100")
+        block outercontent
+        
+        div(class="container flex-grow-1")
+          block content
+    block body_scripts

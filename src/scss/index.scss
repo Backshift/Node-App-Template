@@ -1,0 +1,22 @@
+// --- UTILS
+@import './utils/fonts.scss';
+
+// --- Components
+@import './components/checkbox.scss';
+@import './components/btns.scss';
+@import './components/inputs.scss';
+@import './components/marker.scss';
+
+
+html body{
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    .btn{
+        font-size: 15px;
+    }
+}
+
+.router-link-exact-active{
+    border-bottom: 3px solid #467ab8 !important;
+}

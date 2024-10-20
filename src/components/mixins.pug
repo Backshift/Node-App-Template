@@ -1,0 +1,22 @@
+mixin authentication-button(isAuthenticated)
+  if isAuthenticated
+    +logout-button
+  else
+    +login-button
+
+mixin auth-nav(isAuthenticated)
+  div(class="navbar-nav ml-auto")
+    if isAuthenticated
+      +authentication-button(isAuthenticated)
+
+mixin login-button()
+  button(
+    class="btn btn-primary btn-block",
+    onclick=`window.location='/login/'`
+  ) Log In
+
+mixin logout-button()
+  button(
+    class="btn btn-primary btn-block",
+    onclick=`window.location='/login/'`
+  ) Log In

@@ -1,0 +1,135 @@
+// @import '../vars.scss';
+$color_orange: #ff9800;
+$color_point_blue: #00bcd4;
+$color_point_green: #4caf50;
+$color_point_red: #e91e63;
+$color_pastel_orange: #8429fc;
+$color_bluetooth_blue: #173D91;
+
+
+$bootstrap-primary: #0066f9;
+$bootstrap-primary-hover: #0069d9;
+$title_btn_pink: #ff91a4;
+
+
+
+.btn {
+    cursor: pointer;
+    &-solid {
+        &-orange{
+            background: $color_orange;
+            color: white;
+            &:hover{
+                color: white;
+            }
+        }
+    }
+    &-outline {
+        &-orange {
+            color: $color_orange;
+            border-color: $color_orange;
+            svg path { fill: $color_orange;}
+        }
+        &-blue {
+            color: $color_point_blue;
+            border-color: $color_point_blue;
+            svg path { fill: $color_point_blue;}
+        }
+        &-green {
+            color: $color_point_green;
+            border-color: $color_point_green;
+            svg path { fill: $color_point_green;}
+        }
+        &-red {
+            color: $color_point_red;
+            border-color: $color_point_red;
+            svg path { fill: $color_point_red;}
+        }
+        &-online{
+            // color: $online_devices;
+            color: #4a9faf;
+            border-color: $online_devices;
+            svg path { fill: $online_devices;}
+            &:hover, &.checked{
+                color: white;
+                background: $online_devices;
+            }
+            
+        }
+        &-offline{
+            // color: $offline_devices;
+            color: #cd963f;
+            border-color: $offline_devices;
+            svg path { fill: $offline_devices;}
+            &:hover, &.checked{
+                color: white;
+                background: $offline_devices;
+            }
+        }
+    }
+    &-source {
+        padding: 0;
+        padding-right: 20px;
+        .col{
+            width: 35px !important;
+            padding: 0;
+        }
+        svg{
+            width: 22px;
+        }
+        &-orange {
+            color: $color_orange;
+            // border-color: $color_orange;
+            svg path { fill: $color_orange;}
+        }
+        &-blue {
+            color: $color_point_blue;
+            // border-color: $color_point_blue;
+            svg path { fill: $color_point_blue;}
+        }
+        &-green {
+            color: $color_point_green;
+            // border-color: $color_point_green;
+            svg path { fill: $color_point_green;}
+        }
+        &-red {
+            color: $color_point_red;
+            // border-color: $color_point_red;
+            svg path { fill: $color_point_red;}
+        }
+        &-pastel-orange {
+            color: $color_pastel_orange;
+            // border-color: $color_point_red;
+            svg path { fill: $color_pastel_orange; }
+        }
+        &-bluetooth-blue {
+            color: $color_bluetooth_blue;
+            // border-color: $color_point_red;
+            svg path { fill: $color_bluetooth_blue; }
+        }
+    }
+    &-title-btn{
+        &-pink {
+            background: $title_btn_pink;
+        }
+    }
+    &-searched-items-date{
+        width: 100%;
+        border: 1px solid #959595;
+        min-height: 40px;
+        white-space: nowrap;
+    }
+    &-grey-standard{
+        border: 1px solid #959595;
+        min-height: 40px;
+        white-space: nowrap;
+    }
+}
+
+.btn {
+    .spin {
+        height: 20px;
+        width: 20px;
+        margin-left: 8px;
+    }
+}
